@@ -114,14 +114,14 @@ The skill uses this Gemini command with model fallback priority:
 ```bash
 gemini -m gemini-3.1-pro-preview -p /tmp/adversarial-review-prompt.txt 2>/dev/null || \
 gemini -m gemini-2.5-pro -p /tmp/adversarial-review-prompt.txt 2>/dev/null || \
-gemini -m gemini-3.0-flash-preview -p /tmp/adversarial-review-prompt.txt 2>/dev/null || \
+gemini -m gemini-3-flash-preview -p /tmp/adversarial-review-prompt.txt 2>/dev/null || \
 gemini -m gemini-2.5-flash -p /tmp/adversarial-review-prompt.txt
 ```
 
 **Model priority** (tries in order):
 1. `gemini-3.1-pro-preview` (Gemini 3.1 Pro)
 2. `gemini-2.5-pro`
-3. `gemini-3.0-flash-preview` (Gemini 3.0 Flash)
+3. `gemini-3-flash-preview` (Gemini 3 Flash)
 4. `gemini-2.5-flash` (fallback)
 
 ## Safety checks
