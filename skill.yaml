@@ -1,0 +1,25 @@
+name: adversarial-reviewer
+description: Use Gemini 3.1 Pro as an adversarial code reviewer to find security vulnerabilities, factual inaccuracies, edge cases, and improvement opportunities.
+author: Carlos Mello
+triggers:
+  - type: keyword
+    pattern: "adversarial review"
+  - type: keyword
+    pattern: "security review"
+  - type: keyword
+    pattern: "security audit"
+  - type: keyword
+    pattern: "vulnerability assessment"
+  - type: keyword
+    pattern: "critical analysis"
+  - type: keyword
+    pattern: "code review"
+  - type: keyword
+    pattern: "red team"
+tools:
+  - bash
+  - glob
+  - grep
+  - read
+install:
+  - npm install -g @google/gemini-cli
