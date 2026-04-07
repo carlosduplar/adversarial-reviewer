@@ -1,24 +1,30 @@
 # Adversarial Reviewer
 
-A Claude Code skill for conducting harsh-but-constructive adversarial code reviews using Google's Gemini CLI with Gemini 3.1 Pro (or fallback to 3.0-flash-preview).
+A Claude Code skill for conducting harsh-but-constructive adversarial code reviews using Google's Gemini CLI with Gemini 3.1 Pro (or fallback to other models).
 
-## What it does
+## Installation
 
-This skill acts as a "red team" reviewer that actively looks for problems rather than being polite. It reviews code, scripts, and documentation for:
+### Via skills.sh (Recommended)
 
-- **Security vulnerabilities** (injection, path traversal, race conditions, secrets exposure)
-- **Data loss risks** (in-place modifications without backups)
-- **Factual inaccuracies** (unverified claims, logical flaws)
-- **Edge cases** (concurrency issues, error handling gaps)
+```bash
+npx skills add <repo-url>
+```
 
-## Why use it
+Or install directly from GitHub:
 
-Regular reviews often focus on what's right. Adversarial reviews focus on what could go wrong. This skill:
+```bash
+npx skills add github:carlosmello/adversarial-reviewer
+```
 
-- Uses Gemini 3.1 Pro for independent, critical analysis
-- Follows a structured format (Critical/Improvements/Suggestions/Questions)
-- Cites specific line numbers and evidence
-- Prioritizes findings by actual risk
+### Manual Installation
+
+```bash
+# Clone the repository
+git clone <repo-url>
+
+# Install to Claude Code skills directory
+claude skills install ./adversarial-reviewer
+```
 
 ## Prerequisites
 
@@ -29,21 +35,14 @@ Regular reviews often focus on what's right. Adversarial reviews focus on what c
 
 2. **Gemini API key** configured (run `gemini` once to set up)
 
-## Installation
+## What it does
 
-### Option 1: Install from .skill file
+This skill acts as a "red team" reviewer that actively looks for problems rather than being polite. It reviews code, scripts, and documentation for:
 
-```bash
-# Download adversarial-reviewer.skill
-claude skills install adversarial-reviewer.skill
-```
-
-### Option 2: Manual installation
-
-```bash
-# Copy skill to your skills directory
-cp -r adversarial-reviewer ~/.claude/skills/
-```
+- **Security vulnerabilities** (injection, path traversal, race conditions, secrets exposure)
+- **Data loss risks** (in-place modifications without backups)
+- **Factual inaccuracies** (unverified claims, logical flaws)
+- **Edge cases** (concurrency issues, error handling gaps)
 
 ## Usage
 
@@ -113,16 +112,16 @@ The skill produces structured reports in this format:
 
 The skill uses this Gemini command with model fallback priority:
 ```bash
-gemini -m gemini-pro-latest -p /tmp/adversarial-review-prompt.txt 2>/dev/null || \
+gemini -m gemini-3.1-pro-preview -p /tmp/adversarial-review-prompt.txt 2>/dev/null || \
 gemini -m gemini-2.5-pro -p /tmp/adversarial-review-prompt.txt 2>/dev/null || \
-gemini -m gemini-flash-latest -p /tmp/adversarial-review-prompt.txt 2>/dev/null || \
+gemini -m gemini-3-flash-preview -p /tmp/adversarial-review-prompt.txt 2>/dev/null || \
 gemini -m gemini-2.5-flash -p /tmp/adversarial-review-prompt.txt
 ```
 
 **Model priority** (tries in order):
-1. `gemini-pro-latest` (Gemini 3.1 Pro alias)
+1. `gemini-3.1-pro-preview` (Gemini 3.1 Pro)
 2. `gemini-2.5-pro`
-3. `gemini-flash-latest` (Gemini 3.0 Flash alias)
+3. `gemini-3-flash-preview` (Gemini 3 Flash)
 4. `gemini-2.5-flash` (fallback)
 
 ## Safety checks
@@ -137,7 +136,7 @@ Before presenting findings, the skill:
 ## Known limitations
 
 - **Gemini rate limits**: May encounter rate limiting during heavy use
-- **Model availability**: Gemini 3.1 Pro may not always be available (fallback to 3.0-flash)
+- **Model availability**: Gemini 3.1 Pro may not always be available (fallback to other models)
 - **Context limits**: Very large files may need to be chunked
 - **Verification needed**: Always verify security claims before acting on them
 
@@ -150,7 +149,7 @@ npm install -g @google/gemini-cli
 ```
 
 ### Rate limit errors
-If you hit rate limits with Gemini 3.1 Pro, the skill will automatically suggest using `gemini-3.0-flash-preview` instead.
+The skill automatically falls back through the model priority list if rate limits are hit.
 
 ### Empty or short responses
 Gemini may return brief responses for simple files. The skill will ask you if you want to:
@@ -165,20 +164,12 @@ No configuration needed. The skill automatically:
 - Selects appropriate review methodology based on file types
 - Adjusts prompt focus based on your request (security vs accuracy vs edge cases)
 
-## Contributing
-
-This skill was created using the [skill-creator](https://github.com/anthropics/skill-creator) workflow. To improve it:
-
-1. Edit `SKILL.md` to adjust methodology
-2. Run evals to test changes
-3. Package with `python package_skill.py`
-
 ## License
 
-MIT - See LICENSE file for details.
+MIT
 
 ## Related
 
 - [Gemini CLI documentation](https://github.com/google/gemini-cli)
 - [Claude Code skills documentation](https://docs.anthropic.com/claude-code/skills)
-- [skill-creator](https://github.com/anthropics/skill-creator) - The workflow used to create this skill
+- [skills.sh](https://skills.sh) - Skill registry and installer
