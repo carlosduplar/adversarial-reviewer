@@ -13,10 +13,10 @@ interface ReviewFile {
 }
 
 const MODEL_PRIORITY = [
-  "gemini-pro-latest",    // Gemini 3.1 Pro alias
+  "gemini-3.1-pro-preview",  // Gemini 3.1 Pro
   "gemini-2.5-pro",
-  "gemini-flash-latest",  // Gemini 3.0 Flash alias
-  "gemini-2.5-flash",     // Fallback
+  "gemini-3.0-flash-preview", // Gemini 3.0 Flash
+  "gemini-2.5-flash",          // Fallback
 ];
 
 /**
